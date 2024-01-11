@@ -2,10 +2,14 @@ package fabdev.spacexjavaapi.controllers;
 
 import fabdev.spacexjavaapi.DTOs.ApiResponseDTO;
 import fabdev.spacexjavaapi.LaunchService;
+import fabdev.spacexjavaapi.models.Launch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/launches")
@@ -18,7 +22,7 @@ public class LaunchController {
     }
 
     @GetMapping()
-    public Flux<ApiResponseDTO> getAllLaunches() {
+    public List<Launch> getAllLaunches() {
         return launchService.getAllLaunches();
     }
 }

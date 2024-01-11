@@ -1,68 +1,56 @@
 package fabdev.spacexjavaapi;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fabdev.spacexjavaapi.DTOs.ApiResponseDTO;
-import org.springframework.core.io.buffer.DataBuffer;
+import fabdev.spacexjavaapi.DTOs.ApiResponseDocsDTO;
+import fabdev.spacexjavaapi.mappers.RocketMapper;
+import fabdev.spacexjavaapi.models.Launch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.util.*;
 
 @Component
 public class WebClientConsumer {
-    private static final  String launches_url= "https://api.spacexdata.com/v4/launches/query";
-    public Flux<ApiResponseDTO> fetchAllLaunchesFromAPI(){
+    private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
 
-        // Create the object structure as a Map
-        Map<String, Object> requestBody = new LinkedHashMap<>();
-        Map<String, Object> query = new LinkedHashMap<>();
-        Map<String, Object> options = new LinkedHashMap<>();
-        List<Object> populate = new ArrayList<>();
-        Map<String, Object> rocket = new LinkedHashMap<>();
-        Map<String, Object> rocketSelect = new LinkedHashMap<>();
-        Map<String, Object> payloads = new LinkedHashMap<>();
-        Map<String, Object> payloadsSelect = new LinkedHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
+    private final ObjectMapper objectMapper;
+    private final WebClient webClient;
 
-        rocketSelect.put("name", 1);
-        rocket.put("path", "rocket");
-        rocket.put("select", rocketSelect);
+    public WebClientConsumer(ObjectMapper objectMapper, WebClient.Builder webClientBuilder) {
+        this.objectMapper = objectMapper;
+        this.webClient = webClientBuilder.baseUrl(LAUNCHES_URL).build();}
 
-        payloadsSelect.put("customers", 1);
-        payloads.put("path", "payloads");
-        payloads.put("select", payloadsSelect);
 
-        populate.add(rocket);
-        populate.add(payloads);
+    public List<Launch> fetchAllLaunchesFromAPI() {
+        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1 } }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ] } }";
 
-        options.put("pagination", false);
-        options.put("populate", populate);
-
-        requestBody.put("query", query);
-        requestBody.put("options", options);
-
-        Flux<ApiResponseDTO> launches = WebClient.create()
-                .post()
-                .uri(launches_url)
+        var dto = webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
-                .bodyToFlux(DataBuffer.class) // Read response as DataBuffer
-                .map(dataBuffer -> {
-                    try {
-                        ObjectMapper mapper = new ObjectMapper();
-                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                        return mapper.readValue(dataBuffer.asInputStream(), ApiResponseDTO.class);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to read data buffer", e);
-                    }
-                })
-                .onErrorResume(e -> Flux.empty()); // Handle errors gracefully
-        return launches;
+                .bodyToMono(ApiResponseDocsDTO.class)
+//                .map(this::mapToApiResponseList)
+                .block();
+
+        logger.info("dto response: {}",dto);
+        logger.info("Api response: {}",requestBody);
+
+        return dto.launches().stream()
+                .map(launchApiResponse -> {
+                    var launch= new Launch(launchApiResponse.flight_number(),
+                            launchApiResponse.name(),
+                            RocketMapper.mapRocketDTOToRocket(launchApiResponse.rocket()),
+                            launchApiResponse.launchDate(),
+                            launchApiResponse.success(),
+                            launchApiResponse.upcoming()
+                            );
+                    return launch;
+                }).toList();
     }
-
-
 
 }

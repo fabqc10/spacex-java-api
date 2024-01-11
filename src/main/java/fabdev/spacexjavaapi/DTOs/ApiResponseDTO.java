@@ -8,9 +8,13 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-public record ApiResponseDTO(int flight_number,
+public record ApiResponseDTO(
+                            @JsonProperty("flight_number")
+                            int flight_number,
+                             @JsonProperty("name")
                              String name,
-                             String rocket,
+                             @JsonProperty("rocket")
+                             RocketDTO rocket,
                              @JsonProperty("date_local")
                              @JsonDeserialize(using = CustomLocalDateDeserializer.class)
                              LocalDate launchDate,

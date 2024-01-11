@@ -6,12 +6,12 @@ import java.util.List;
 public class Launch {
     private int flight_number;
     private String name;
-    private String rocket;
+    private Rocket rocket;
     private LocalDate launchDate;
     private boolean success;
     private boolean upcoming;
 
-    public Launch(int flight_number, String name, String rocket, LocalDate launchDate, boolean success, boolean upcoming) {
+    public Launch(int flight_number, String name, Rocket rocket, LocalDate launchDate, boolean success, boolean upcoming) {
         this.flight_number = flight_number;
         this.name = name;
         this.rocket = rocket;
@@ -36,11 +36,11 @@ public class Launch {
         this.name = name;
     }
 
-    public String getRocket() {
+    public Rocket getRocket() {
         return rocket;
     }
 
-    public void setRocket(String rocket) {
+    public void setRocket(Rocket rocket) {
         this.rocket = rocket;
     }
 

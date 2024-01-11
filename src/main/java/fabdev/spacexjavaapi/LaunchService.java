@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 public class LaunchService {
     private final WebClientConsumer webClientConsumer;
@@ -14,7 +16,8 @@ public class LaunchService {
         this.webClientConsumer = webClientConsumer;
     }
 
-    public Flux<ApiResponseDTO> getAllLaunches() {
+    public List<Launch> getAllLaunches() {
         return webClientConsumer.fetchAllLaunchesFromAPI();
     }
+
 }
