@@ -8,14 +8,24 @@ public class Launch {
     private String name;
     private Rocket rocket;
     private LocalDate launchDate;
+    private List<Payloads> customers;
+
+
     private boolean success;
     private boolean upcoming;
 
-    public Launch(int flight_number, String name, Rocket rocket, LocalDate launchDate, boolean success, boolean upcoming) {
+    public Launch(int flight_number,
+                  String name,
+                  Rocket rocket,
+                  LocalDate launchDate,
+                  List<Payloads> customers,
+                  boolean success,
+                  boolean upcoming) {
         this.flight_number = flight_number;
         this.name = name;
         this.rocket = rocket;
         this.launchDate = launchDate;
+        this.customers = customers;
         this.success = success;
         this.upcoming = upcoming;
     }
@@ -66,6 +76,14 @@ public class Launch {
 
     public void setUpcoming(boolean upcoming) {
         this.upcoming = upcoming;
+    }
+
+    public List<Payloads> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Payloads> customers) {
+        this.customers = customers;
     }
 
 }

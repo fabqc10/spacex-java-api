@@ -18,6 +18,8 @@ public record ApiResponseDTO(
                              @JsonProperty("date_local")
                              @JsonDeserialize(using = CustomLocalDateDeserializer.class)
                              LocalDate launchDate,
+                             @JsonProperty("payloads")
+                             List<PayloadsDTO> payloads,
                              boolean success,
                              boolean upcoming) {
 

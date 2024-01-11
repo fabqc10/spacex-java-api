@@ -2,6 +2,7 @@ package fabdev.spacexjavaapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fabdev.spacexjavaapi.DTOs.ApiResponseDocsDTO;
+import fabdev.spacexjavaapi.mappers.PayloadsMapper;
 import fabdev.spacexjavaapi.mappers.RocketMapper;
 import fabdev.spacexjavaapi.models.Launch;
 import org.slf4j.Logger;
@@ -34,7 +35,6 @@ public class WebClientConsumer {
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .bodyToMono(ApiResponseDocsDTO.class)
-//                .map(this::mapToApiResponseList)
                 .block();
 
         logger.info("dto response: {}",dto);
@@ -46,6 +46,7 @@ public class WebClientConsumer {
                             launchApiResponse.name(),
                             RocketMapper.mapRocketDTOToRocket(launchApiResponse.rocket()),
                             launchApiResponse.launchDate(),
+                            PayloadsMapper.mapPayloadsDTOToPayloads(launchApiResponse.payloads()),
                             launchApiResponse.success(),
                             launchApiResponse.upcoming()
                             );
