@@ -47,6 +47,8 @@ public class WebClientConsumer {
                             RocketMapper.mapRocketDTOToRocket(launchApiResponse.rocket()),
                             launchApiResponse.launchDate(),
                             PayloadsMapper.mapPayloadsDTOToPayloads(launchApiResponse.payloads()),
+                            launchApiResponse.links(),
+                            launchApiResponse.details(),
                             launchApiResponse.success(),
                             launchApiResponse.upcoming()
                             );

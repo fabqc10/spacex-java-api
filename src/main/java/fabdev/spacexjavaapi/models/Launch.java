@@ -1,5 +1,7 @@
 package fabdev.spacexjavaapi.models;
 
+import fabdev.spacexjavaapi.DTOs.LinksDTO;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,7 +11,8 @@ public class Launch {
     private Rocket rocket;
     private LocalDate launchDate;
     private List<Payloads> customers;
-
+    private LinksDTO links;
+    private String details;
 
     private boolean success;
     private boolean upcoming;
@@ -19,6 +22,8 @@ public class Launch {
                   Rocket rocket,
                   LocalDate launchDate,
                   List<Payloads> customers,
+                  LinksDTO links,
+                  String details,
                   boolean success,
                   boolean upcoming) {
         this.flight_number = flight_number;
@@ -26,6 +31,8 @@ public class Launch {
         this.rocket = rocket;
         this.launchDate = launchDate;
         this.customers = customers;
+        this.links = links;
+        this.details = details;
         this.success = success;
         this.upcoming = upcoming;
     }
@@ -84,6 +91,22 @@ public class Launch {
 
     public void setCustomers(List<Payloads> customers) {
         this.customers = customers;
+    }
+
+    public LinksDTO getLinks() {
+        return links;
+    }
+
+    public void setLinks(LinksDTO links) {
+        this.links = links;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
 }

@@ -20,6 +20,10 @@ public record ApiResponseDTO(
                              LocalDate launchDate,
                              @JsonProperty("payloads")
                              List<PayloadsDTO> payloads,
+                            @JsonProperty("links")
+                             LinksDTO links,
+                             @JsonProperty("details")
+                             String details,
                              boolean success,
                              boolean upcoming) {
 
