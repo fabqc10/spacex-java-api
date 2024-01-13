@@ -3,10 +3,13 @@ package fabdev.spacexjavaapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fabdev.spacexjavaapi.DTOs.ApiResponseDocsCrewDTO;
 import fabdev.spacexjavaapi.DTOs.ApiResponseDocsDTO;
+import fabdev.spacexjavaapi.DTOs.RocketDTO;
 import fabdev.spacexjavaapi.mappers.CrewMapper;
 import fabdev.spacexjavaapi.mappers.LaunchMapper;
+import fabdev.spacexjavaapi.mappers.RocketMapper;
 import fabdev.spacexjavaapi.models.Astronaut;
 import fabdev.spacexjavaapi.models.Launch;
+import fabdev.spacexjavaapi.models.Rocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -21,6 +24,7 @@ public class WebClientConsumer {
     //test
     private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
     private static final String CREW_URL="https://api.spacexdata.com/v4/crew/query";
+    private static final String ROCKETS_URL = "https://api.spacexdata.com/v4/rockets";
 
     private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
     private final ObjectMapper objectMapper;
@@ -67,6 +71,17 @@ public class WebClientConsumer {
         return dto.crew().stream()
                 .map(CrewMapper::mapAstronautDTOToAstronaut)
                 .toList();
+    }
+
+    public List<Rocket> getAllRocketsFromApi(){
+        var dto = webClient.get()
+                .uri(ROCKETS_URL)
+                .retrieve()
+                .bodyToFlux(RocketDTO.class)
+                .map(RocketMapper::mapRocketDTOToRocket)
+                .collectList()
+                .block();
+        return dto;
     }
 
 
