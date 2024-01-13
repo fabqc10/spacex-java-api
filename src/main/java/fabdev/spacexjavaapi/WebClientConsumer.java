@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fabdev.spacexjavaapi.DTOs.ApiResponseDocsDTO;
 import fabdev.spacexjavaapi.DTOs.AstronautDTO;
 import fabdev.spacexjavaapi.DTOs.AstronautListDTO;
+import fabdev.spacexjavaapi.mappers.CrewMapper;
 import fabdev.spacexjavaapi.mappers.PayloadsMapper;
 import fabdev.spacexjavaapi.mappers.RocketMapper;
 import fabdev.spacexjavaapi.models.Astronaut;
@@ -75,16 +76,8 @@ public class WebClientConsumer {
         logger.info("dto crew response: {}",dto);
 
         return dto.stream()
-                .map(crewApiResponse -> new Astronaut(
-                        crewApiResponse.id(),
-                        crewApiResponse.name(),
-                        crewApiResponse.agency(),
-                        crewApiResponse.image(),
-                        crewApiResponse.wikipedia(),
-                        crewApiResponse.status()
-                ))
+                .map(CrewMapper::mapAstronautDTOToAstronaut)
                 .toList();
-
     }
 
 
