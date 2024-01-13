@@ -16,6 +16,7 @@ import java.util.*;
 
 @Component
 public class WebClientConsumer {
+    //test
     private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
 
     private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
