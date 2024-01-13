@@ -32,7 +32,7 @@ public class WebClientConsumer {
 
 
     public List<Launch> fetchAllLaunchesFromAPI(int page, int limit) {
-        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1, \"type\": 1, \"country\": 1, \"company\": 1, \"description\": 1} }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ], \"page\": " + page + ", \"limit\": " + limit + " } }";
+        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1, \"type\": 1, \"country\": 1, \"company\": 1, \"description\": 1, \"height\": 1 , \"diameter\": 1, \"mass\": 1 , \"flickr_images\": 1} }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ], \"page\": " + page + ", \"limit\": " + limit + " } }";
 
         var dto = webClient.post()
                 .uri(LAUNCHES_URL)

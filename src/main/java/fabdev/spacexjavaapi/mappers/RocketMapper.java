@@ -11,6 +11,10 @@ public class RocketMapper {
                 rocketDTO.type(),
                 rocketDTO.company(),
                 rocketDTO.country(),
-                rocketDTO.description());
+                rocketDTO.description(),
+                rocketDTO.height(),
+                rocketDTO.diameter(),
+                rocketDTO.mass(),
+                rocketDTO.images());
     }
 }
