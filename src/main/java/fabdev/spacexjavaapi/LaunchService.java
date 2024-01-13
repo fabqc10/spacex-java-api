@@ -17,12 +17,12 @@ public class LaunchService {
         this.webClientConsumer = webClientConsumer;
     }
 
-    public List<Launch> getAllLaunches() {
-        return webClientConsumer.fetchAllLaunchesFromAPI();
+    public List<Launch> getAllLaunches(int page, int limit) {
+        return webClientConsumer.fetchAllLaunchesFromAPI(page, limit);
     }
 
-    public List<Astronaut> getAllCrew(){
-        return webClientConsumer.getAllCrewFromApi();
+    public List<Astronaut> getAllCrew(int page, int limit){
+        return webClientConsumer.getAllCrewFromApi(page,limit);
     }
 
 }

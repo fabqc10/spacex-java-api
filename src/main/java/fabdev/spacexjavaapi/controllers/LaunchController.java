@@ -1,14 +1,12 @@
 package fabdev.spacexjavaapi.controllers;
 
-import fabdev.spacexjavaapi.DTOs.ApiResponseDTO;
 import fabdev.spacexjavaapi.LaunchService;
 import fabdev.spacexjavaapi.models.Astronaut;
 import fabdev.spacexjavaapi.models.Launch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -23,12 +21,18 @@ public class LaunchController {
     }
 
     @GetMapping("launches")
-    public List<Launch> getAllLaunches() {
-        return launchService.getAllLaunches();
+    public List<Launch> getAllLaunches(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        return launchService.getAllLaunches(page, limit);
     }
 
     @GetMapping("crew")
-        public List<Astronaut> getAllCrew() {
-            return launchService.getAllCrew();
+        public List<Astronaut> getAllCrew(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+            return launchService.getAllCrew(page, limit);
         }
 }

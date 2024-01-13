@@ -1,12 +1,10 @@
 package fabdev.spacexjavaapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fabdev.spacexjavaapi.DTOs.ApiResponseDocsCrewDTO;
 import fabdev.spacexjavaapi.DTOs.ApiResponseDocsDTO;
-import fabdev.spacexjavaapi.DTOs.AstronautDTO;
-import fabdev.spacexjavaapi.DTOs.AstronautListDTO;
 import fabdev.spacexjavaapi.mappers.CrewMapper;
-import fabdev.spacexjavaapi.mappers.PayloadsMapper;
-import fabdev.spacexjavaapi.mappers.RocketMapper;
+import fabdev.spacexjavaapi.mappers.LaunchMapper;
 import fabdev.spacexjavaapi.models.Astronaut;
 import fabdev.spacexjavaapi.models.Launch;
 import org.slf4j.Logger;
@@ -17,13 +15,12 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class WebClientConsumer {
     //test
     private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
-    private static final String CREW_URL="https://api.spacexdata.com/v4/crew";
+    private static final String CREW_URL="https://api.spacexdata.com/v4/crew/query";
 
     private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
     private final ObjectMapper objectMapper;
@@ -34,8 +31,8 @@ public class WebClientConsumer {
         this.webClient = webClient;}
 
 
-    public List<Launch> fetchAllLaunchesFromAPI() {
-        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1 } }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ] } }";
+    public List<Launch> fetchAllLaunchesFromAPI(int page, int limit) {
+        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1, \"type\": 1, \"country\": 1, \"company\": 1, \"description\": 1} }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ], \"page\": " + page + ", \"limit\": " + limit + " } }";
 
         var dto = webClient.post()
                 .uri(LAUNCHES_URL)
@@ -49,37 +46,28 @@ public class WebClientConsumer {
         logger.info("Api response: {}",requestBody);
 
         return dto.launches().stream()
-                .map(launchApiResponse -> {
-                    var launch= new Launch(launchApiResponse.flight_number(),
-                            launchApiResponse.name(),
-                            RocketMapper.mapRocketDTOToRocket(launchApiResponse.rocket()),
-                            launchApiResponse.launchDate(),
-                            PayloadsMapper.mapPayloadsDTOToPayloads(launchApiResponse.payloads()),
-                            launchApiResponse.links(),
-                            launchApiResponse.details(),
-                            launchApiResponse.success(),
-                            launchApiResponse.upcoming()
-                            );
-                    return launch;
-                }).toList();
+                .map(LaunchMapper::mapApiResponseDTOToLaunch)
+                .toList();
     }
 
-    public List<Astronaut> getAllCrewFromApi(){
-        var dto = webClient.get()
+    public List<Astronaut> getAllCrewFromApi(int page, int limit){
+        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"page\": " + page + ", \"limit\": " + limit + " } }";
+
+        var dto = webClient.post()
                 .uri(CREW_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
-                .bodyToFlux(AstronautDTO.class)
-                .collectList()
+                .bodyToMono(ApiResponseDocsCrewDTO.class)
                 .block();
 
 
         logger.info("dto crew response: {}",dto);
 
-        return dto.stream()
+        return dto.crew().stream()
                 .map(CrewMapper::mapAstronautDTOToAstronaut)
                 .toList();
     }
-
 
 
 }
