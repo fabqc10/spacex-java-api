@@ -2,8 +2,6 @@ package fabdev.spacexjavaapi.models;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 public class Rocket {
     private String id;
     private String name;

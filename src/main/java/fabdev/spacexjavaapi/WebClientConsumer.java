@@ -21,7 +21,6 @@ import java.util.*;
 
 @Component
 public class WebClientConsumer {
-    //test
     private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
     private static final String CREW_URL="https://api.spacexdata.com/v4/crew/query";
     private static final String ROCKETS_URL = "https://api.spacexdata.com/v4/rockets";

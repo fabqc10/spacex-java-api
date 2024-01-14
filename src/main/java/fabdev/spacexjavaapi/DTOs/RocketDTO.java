@@ -1,12 +1,9 @@
 package fabdev.spacexjavaapi.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 public record RocketDTO(
         String id,
         String name,
