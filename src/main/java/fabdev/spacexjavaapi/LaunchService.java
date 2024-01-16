@@ -1,4 +1,5 @@
 package fabdev.spacexjavaapi;
+
 import fabdev.spacexjavaapi.models.Astronaut;
 import fabdev.spacexjavaapi.models.Launch;
 import fabdev.spacexjavaapi.models.Rocket;
@@ -18,10 +19,11 @@ public class LaunchService {
         return webClientConsumer.fetchAllLaunchesFromAPI(page, limit);
     }
 
-    public List<Astronaut> getAllCrew(int page, int limit){
-        return webClientConsumer.getAllCrewFromApi(page,limit);
+    public List<Astronaut> getAllCrew(int page, int limit) {
+        return webClientConsumer.getAllCrewFromApi(page, limit);
     }
-    public List<Rocket> getAllRockets(){
+
+    public List<Rocket> getAllRockets() {
         return webClientConsumer.getAllRocketsFromApi();
     }
 

@@ -21,8 +21,8 @@ import java.util.*;
 
 @Component
 public class WebClientConsumer {
-    private static final  String LAUNCHES_URL= "https://api.spacexdata.com/v4/launches/query";
-    private static final String CREW_URL="https://api.spacexdata.com/v4/crew/query";
+    private static final String LAUNCHES_URL = "https://api.spacexdata.com/v4/launches/query";
+    private static final String CREW_URL = "https://api.spacexdata.com/v4/crew/query";
     private static final String ROCKETS_URL = "https://api.spacexdata.com/v4/rockets";
 
     private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
@@ -31,7 +31,8 @@ public class WebClientConsumer {
 
     public WebClientConsumer(ObjectMapper objectMapper, WebClient webClient) {
         this.objectMapper = objectMapper;
-        this.webClient = webClient;}
+        this.webClient = webClient;
+    }
 
 
     public List<Launch> fetchAllLaunchesFromAPI(int page, int limit) {
@@ -45,15 +46,15 @@ public class WebClientConsumer {
                 .bodyToMono(ApiResponseDocsDTO.class)
                 .block();
 
-        logger.info("dto response: {}",dto);
-        logger.info("Api response: {}",requestBody);
+        logger.info("dto response: {}", dto);
+        logger.info("Api response: {}", requestBody);
 
         return dto.launches().stream()
                 .map(LaunchMapper::mapApiResponseDTOToLaunch)
                 .toList();
     }
 
-    public List<Astronaut> getAllCrewFromApi(int page, int limit){
+    public List<Astronaut> getAllCrewFromApi(int page, int limit) {
         String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"page\": " + page + ", \"limit\": " + limit + " } }";
 
         var dto = webClient.post()
@@ -65,14 +66,14 @@ public class WebClientConsumer {
                 .block();
 
 
-        logger.info("dto crew response: {}",dto);
+        logger.info("dto crew response: {}", dto);
 
         return dto.crew().stream()
                 .map(CrewMapper::mapAstronautDTOToAstronaut)
                 .toList();
     }
 
-    public List<Rocket> getAllRocketsFromApi(){
+    public List<Rocket> getAllRocketsFromApi() {
         var dto = webClient.get()
                 .uri(ROCKETS_URL)
                 .retrieve()
