@@ -12,6 +12,7 @@ import fabdev.spacexjavaapi.models.Launch;
 import fabdev.spacexjavaapi.models.Rocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,9 +22,12 @@ import java.util.*;
 
 @Component
 public class WebClientConsumer {
-    private static final String LAUNCHES_URL = "https://api.spacexdata.com/v4/launches/query";
-    private static final String CREW_URL = "https://api.spacexdata.com/v4/crew/query";
-    private static final String ROCKETS_URL = "https://api.spacexdata.com/v4/rockets";
+    @Value("${spacex.api.launches-url}")
+    private String LAUNCHES_URL;
+    @Value("${spacex.api.crew-url}")
+    private String CREW_URL;
+    @Value("${spacex.api.rockets-url}")
+    private String ROCKETS_URL;
 
     private final Logger logger = LoggerFactory.getLogger(WebClientConsumer.class);
     private final ObjectMapper objectMapper;
@@ -86,3 +90,18 @@ public class WebClientConsumer {
 
 
 }
+
+//    public Mono<List<Launch>> fetchAllLaunchesFromAPI(int page, int limit) {
+//        // ... (your WebClient configuration)
+//        return webClient.post()
+//                .uri(launchesUrl)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(BodyInserters.fromValue(requestBody))
+//                .retrieve()
+//                .onStatus(HttpStatus::isError, response -> Mono.error(new YourCustomException("WebClient request failed")))
+//                .bodyToMono(ApiResponseDocsDTO.class)
+//                .map(dto -> dto.launches().stream()
+//                        .map(LaunchMapper::mapApiResponseDTOToLaunch)
+//                        .toList());
+//    }
+

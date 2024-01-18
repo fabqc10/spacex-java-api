@@ -13,8 +13,9 @@ public class Rocket {
     private Map<String, Object> diameter;
     private Map<String, Object> mass;
     private List<String> images;
+    private boolean active;
 
-    public Rocket(String id, String name, String type, String company, String country, String description, Map<String, Object> height, Map<String, Object> diameter, Map<String, Object> mass, List<String> images) {
+    public Rocket(String id, String name, String type, String company, String country, String description, Map<String, Object> height, Map<String, Object> diameter, Map<String, Object> mass, List<String> images, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -25,6 +26,15 @@ public class Rocket {
         this.diameter = diameter;
         this.mass = mass;
         this.images = images;
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public List<String> getImages() {

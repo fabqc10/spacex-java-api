@@ -15,6 +15,7 @@ public class RocketMapper {
                 rocketDTO.height(),
                 rocketDTO.diameter(),
                 rocketDTO.mass(),
-                rocketDTO.images());
+                rocketDTO.images(),
+                rocketDTO.active());
     }
 }
