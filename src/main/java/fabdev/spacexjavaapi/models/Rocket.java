@@ -14,8 +14,10 @@ public class Rocket {
     private Map<String, Object> mass;
     private List<String> images;
     private boolean active;
+    private String firstFlight;
+    private int cost;
 
-    public Rocket(String id, String name, String type, String company, String country, String description, Map<String, Object> height, Map<String, Object> diameter, Map<String, Object> mass, List<String> images, boolean active) {
+    public Rocket(String id, String name, String type, String company, String country, String description, Map<String, Object> height, Map<String, Object> diameter, Map<String, Object> mass, List<String> images, boolean active, String firstFlight, int cost) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -27,6 +29,24 @@ public class Rocket {
         this.mass = mass;
         this.images = images;
         this.active = active;
+        this.firstFlight = firstFlight;
+        this.cost = cost;
+    }
+
+    public String getFirstFlight() {
+        return firstFlight;
+    }
+
+    public void setFirstFlight(String firstFlight) {
+        this.firstFlight = firstFlight;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
     public boolean isActive() {

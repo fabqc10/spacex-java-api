@@ -16,6 +16,8 @@ public class RocketMapper {
                 rocketDTO.diameter(),
                 rocketDTO.mass(),
                 rocketDTO.images(),
-                rocketDTO.active());
+                rocketDTO.active(),
+                rocketDTO.firstFlight(),
+                rocketDTO.cost());
     }
 }

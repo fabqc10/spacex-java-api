@@ -19,6 +19,10 @@ public record RocketDTO(
         Map<String, Object> mass,
         @JsonProperty("flickr_images")
         List<String> images,
-        boolean active
+        boolean active,
+        @JsonProperty("first_flight")
+        String firstFlight,
+        @JsonProperty("cost_per_launch")
+        int cost
 ) {
 }
