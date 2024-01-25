@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.http.HttpStatus;
+
 
 import java.util.*;
 
@@ -113,21 +115,5 @@ public class WebClientConsumer {
         }
 
     }
-
-
 }
-
-//    public Mono<List<Launch>> fetchAllLaunchesFromAPI(int page, int limit) {
-//        // ... (your WebClient configuration)
-//        return webClient.post()
-//                .uri(launchesUrl)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(BodyInserters.fromValue(requestBody))
-//                .retrieve()
-//                .onStatus(HttpStatus::isError, response -> Mono.error(new YourCustomException("WebClient request failed")))
-//                .bodyToMono(ApiResponseDocsDTO.class)
-//                .map(dto -> dto.launches().stream()
-//                        .map(LaunchMapper::mapApiResponseDTOToLaunch)
-//                        .toList());
-//    }
 
