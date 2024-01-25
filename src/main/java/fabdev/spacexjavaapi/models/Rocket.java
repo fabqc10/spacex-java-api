@@ -2,12 +2,13 @@ package fabdev.spacexjavaapi.models;
 
 import java.util.List;
 import java.util.Map;
+
 public class Rocket {
     private String id;
     private String name;
     private String type;
     private String company;
-    private  String country;
+    private String country;
     private String description;
     private Map<String, Object> height;
     private Map<String, Object> diameter;

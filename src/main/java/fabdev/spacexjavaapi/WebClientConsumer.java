@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.*;
 
@@ -40,23 +41,33 @@ public class WebClientConsumer {
 
 
     public List<Launch> fetchAllLaunchesFromAPI(int page, int limit) {
-        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1, \"type\": 1, \"country\": 1, \"company\": 1, \"description\": 1, \"height\": 1 , \"diameter\": 1, \"mass\": 1 , \"flickr_images\": 1} }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ], \"page\": " + page + ", \"limit\": " + limit + " } }";
+        try {
+            String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"populate\": [{\"path\": \"rocket\", \"select\": {\"name\": 1, \"type\": 1, \"country\": 1, \"company\": 1, \"description\": 1, \"height\": 1 , \"diameter\": 1, \"mass\": 1 , \"flickr_images\": 1} }, {\"path\": \"payloads\", \"select\": {\"customers\": 1 } } ], \"page\": " + page + ", \"limit\": " + limit + " } }";
 
-        var dto = webClient.post()
-                .uri(LAUNCHES_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(requestBody))
-                .retrieve()
-                .bodyToMono(ApiResponseDocsDTO.class)
-                .block();
+            var dto = webClient.post()
+                    .uri(LAUNCHES_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromValue(requestBody))
+                    .retrieve()
+                    .bodyToMono(ApiResponseDocsDTO.class)
+                    .block();
 
-        logger.info("dto response: {}", dto);
-        logger.info("Api response: {}", requestBody);
+            if (dto != null) {
+                logger.info("dto response: {}", dto);
+                logger.info("Api response: {}", requestBody);
 
-        return dto.launches().stream()
-                .map(LaunchMapper::mapApiResponseDTOToLaunch)
-                .toList();
+                return dto.launches().stream()
+                        .map(LaunchMapper::mapApiResponseDTOToLaunch)
+                        .toList();
+            } else {
+                throw new IllegalStateException("Failed to fetch launches from the API.");
+            }
+        } catch (WebClientResponseException e) {
+            logger.error("API error: {}", e.getResponseBodyAsString());
+            throw new RuntimeException("Failed to fetch launches from the API.", e);
+        }
     }
+
 
     public List<Astronaut> getAllCrewFromApi(int page, int limit) {
         String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"page\": " + page + ", \"limit\": " + limit + " } }";

@@ -4,7 +4,7 @@ import fabdev.spacexjavaapi.DTOs.RocketDTO;
 import fabdev.spacexjavaapi.models.Rocket;
 
 public class RocketMapper {
-    public static Rocket mapRocketDTOToRocket(RocketDTO rocketDTO){
+    public static Rocket mapRocketDTOToRocket(RocketDTO rocketDTO) {
         return new Rocket(
                 rocketDTO.id(),
                 rocketDTO.name(),

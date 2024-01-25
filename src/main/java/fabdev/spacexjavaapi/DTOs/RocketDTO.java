@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
+
 public record RocketDTO(
         String id,
         String name,
@@ -24,5 +25,6 @@ public record RocketDTO(
         String firstFlight,
         @JsonProperty("cost_per_launch")
         int cost
+
 ) {
 }
