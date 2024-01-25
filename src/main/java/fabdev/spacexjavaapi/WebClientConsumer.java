@@ -70,22 +70,32 @@ public class WebClientConsumer {
 
 
     public List<Astronaut> getAllCrewFromApi(int page, int limit) {
-        String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"page\": " + page + ", \"limit\": " + limit + " } }";
+        try {
+            String requestBody = "{\"query\": {}, \"options\": {\"pagination\": true, \"page\": " + page + ", \"limit\": " + limit + " } }";
 
-        var dto = webClient.post()
-                .uri(CREW_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(requestBody))
-                .retrieve()
-                .bodyToMono(ApiResponseDocsCrewDTO.class)
-                .block();
+            var dto = webClient.post()
+                    .uri(CREW_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromValue(requestBody))
+                    .retrieve()
+                    .bodyToMono(ApiResponseDocsCrewDTO.class)
+                    .block();
 
+            if (dto != null) {
+                logger.info("dto crew response: {}", dto);
 
-        logger.info("dto crew response: {}", dto);
+                return dto.crew().stream()
+                        .map(CrewMapper::mapAstronautDTOToAstronaut)
+                        .toList();
+            } else {
+                throw new IllegalStateException("Failed to fetch Astronauts from the API.");
+            }
 
-        return dto.crew().stream()
-                .map(CrewMapper::mapAstronautDTOToAstronaut)
-                .toList();
+        } catch (WebClientResponseException e) {
+            logger.error("API error: {}", e.getResponseBodyAsString());
+            throw new RuntimeException("Failed to fetch Astronauts from the API.", e);
+        }
+
     }
 
     public List<Rocket> getAllRocketsFromApi() {
