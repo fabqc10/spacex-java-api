@@ -99,14 +99,19 @@ public class WebClientConsumer {
     }
 
     public List<Rocket> getAllRocketsFromApi() {
-        var dto = webClient.get()
-                .uri(ROCKETS_URL)
-                .retrieve()
-                .bodyToFlux(RocketDTO.class)
-                .map(RocketMapper::mapRocketDTOToRocket)
-                .collectList()
-                .block();
-        return dto;
+        try {
+            return webClient.get()
+                    .uri(ROCKETS_URL)
+                    .retrieve()
+                    .bodyToFlux(RocketDTO.class)
+                    .map(RocketMapper::mapRocketDTOToRocket)
+                    .collectList()
+                    .block();
+        } catch (WebClientResponseException e) {
+            logger.error("API error: {}", e.getResponseBodyAsString());
+            throw new RuntimeException("Failed to fetch Rockets from the API.", e);
+        }
+
     }
 
 
